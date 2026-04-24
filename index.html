@@ -3,258 +3,306 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LĀČPLĒSIS | Digitālais Ceļvedis</title>
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <title>Lāčplēsis — Animēts Digitālais Eposs</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;700;800&family=Playfair+Display:ital,wght@0,900;1,700&display=swap');
-
         :root {
-            --bg-light: #f4f8f4;
-            --forest: #1b4332;
-            --moss: #2d6a4f;
-            --leaf: #95d5b2;
+            --accent: #8b4513;
+            --soft-bg: #fdfaf5;
+            --text: #2c3e50;
+            --border: #e0d7c6;
             --white: #ffffff;
-            --accent: #b58941;
         }
-
-        * { scroll-behavior: smooth; }
 
         body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: var(--bg-light);
-            color: var(--forest);
+            font-family: 'Georgia', serif;
             margin: 0;
+            background-color: var(--soft-bg);
+            color: var(--text);
             line-height: 1.8;
+            overflow-x: hidden;
         }
 
-        /* Navigācijas pogas */
-        .nav-menu {
-            position: sticky;
+        /* Navigācija ar parādīšanās animāciju */
+        nav {
+            position: fixed;
             top: 0;
-            background: rgba(255, 255, 255, 0.9);
+            width: 100%;
+            background: rgba(253, 250, 245, 0.9);
             backdrop-filter: blur(10px);
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            padding: 15px;
-            z-index: 1000;
-            border-bottom: 1px solid var(--leaf);
-        }
-
-        .nav-btn {
-            background: transparent;
-            border: 1px solid var(--moss);
-            color: var(--moss);
-            padding: 8px 20px;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: 700;
-            text-transform: uppercase;
-            font-size: 0.75rem;
-            transition: 0.3s;
-            text-decoration: none;
-        }
-
-        .nav-btn:hover {
-            background: var(--moss);
-            color: white;
-        }
-
-        /* Hero Sekcija */
-        .hero {
-            height: 70vh;
-            background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.4)), 
-                        url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1632&auto=format&fit=crop');
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            color: white;
+            padding: 15px 0;
             text-align: center;
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+            animation: slideDown 0.8s ease;
         }
 
-        .hero h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(3rem, 10vw, 6rem);
-            margin: 0;
-            text-shadow: 0 4px 20px rgba(0,0,0,0.3);
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            letter-spacing: 4px;
+        nav a {
+            color: var(--accent);
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
             text-transform: uppercase;
-            opacity: 0.9;
+            font-size: 0.85rem;
+            transition: 0.3s;
+            position: relative;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--accent);
+            transition: 0.3s;
+        }
+
+        nav a:hover::after { width: 100%; }
+
+        /* Hero attēls ar parallaksa efektu */
+        .hero-container {
+            overflow: hidden;
+            height: 550px;
+            position: relative;
+            margin-top: 50px;
+        }
+
+        .hero-image {
+            width: 100%;
+            height: 120%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            transition: transform 0.1s ease-out; /* JavaScript kontrolēs parallaksi */
         }
 
         .container {
-            max-width: 1100px;
+            max-width: 900px;
             margin: 0 auto;
-            padding: 60px 20px;
+            padding: 40px 20px;
         }
 
-        section { padding: 80px 0; border-bottom: 1px solid rgba(0,0,0,0.05); }
-
-        .section-tag {
-            color: var(--moss);
-            font-weight: 800;
-            text-transform: uppercase;
-            font-size: 0.8rem;
-            letter-spacing: 2px;
+        /* Animācijas definīcijas */
+        @keyframes slideDown {
+            from { transform: translateY(-100%); }
+            to { transform: translateY(0); }
         }
 
-        h2 { font-family: 'Playfair Display', serif; font-size: 3rem; margin-top: 10px; }
-
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-top: 40px;
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .card {
-            background: var(--white);
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
-            border-bottom: 4px solid var(--leaf);
+        /* Klase elementiem, kas parādīsies skrollējot */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
         }
 
-        /* Rulete */
-        .rulete-box {
-            background: var(--forest);
-            color: white;
-            padding: 80px 40px;
-            border-radius: 40px;
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        h1 { 
+            font-size: 4rem; 
+            color: var(--accent); 
             text-align: center;
+            margin-top: 40px;
+            letter-spacing: 3px;
         }
 
-        #hero-name {
-            font-family: 'Playfair Display', serif;
-            font-size: 4rem;
-            margin: 30px 0;
-            color: var(--leaf);
+        .info-section {
+            background: var(--white);
+            padding: 50px;
+            margin-bottom: 40px;
+            border-radius: 4px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+            border: 1px solid var(--border);
+            transition: transform 0.3s ease;
         }
 
-        .btn-main {
-            background: var(--leaf);
-            color: var(--forest);
-            padding: 18px 45px;
-            border-radius: 50px;
+        .info-section:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Tēlu tīkls */
+        .characters-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .char-box {
+            padding: 20px;
+            border-left: 2px solid transparent;
+            transition: 0.4s;
+        }
+
+        .char-box:hover {
+            border-left: 2px solid var(--accent);
+            background: #f9f6f0;
+            padding-left: 30px;
+        }
+
+        .char-box strong {
+            color: var(--accent);
+            font-size: 1.3rem;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        /* Poga un interaktīvais fakts */
+        .fact-btn {
+            display: block;
+            margin: 30px auto;
+            padding: 15px 40px;
+            background: var(--accent);
+            color: white;
             border: none;
-            font-weight: 800;
+            border-radius: 50px;
             cursor: pointer;
-            transition: 0.3s;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(139, 69, 19, 0.3);
         }
 
-        .btn-main:hover { transform: scale(1.05); background: white; }
+        .fact-btn:hover {
+            transform: scale(1.05);
+            background: #6d3610;
+        }
 
-        footer { text-align: center; padding: 60px; opacity: 0.5; font-size: 0.8rem; }
+        #fact-display {
+            text-align: center;
+            font-size: 1.2rem;
+            font-style: italic;
+            min-height: 60px;
+            color: var(--accent);
+            transition: opacity 0.5s;
+        }
+
+        footer {
+            text-align: center;
+            padding: 80px 20px;
+            background: #f0ede6;
+            margin-top: 50px;
+        }
+
+        @media (max-width: 768px) {
+            .characters-grid { grid-template-columns: 1fr; }
+            h1 { font-size: 2.5rem; }
+        }
     </style>
 </head>
 <body>
 
-    <div class="hero">
-        <p data-aos="fade-down">Latvijas nacionālais eposs</p>
-        <h1 data-aos="zoom-in">LĀČPLĒSIS</h1>
-    </div>
-
-    <nav class="nav-menu">
-        <a href="#vesture" class="nav-btn">Vēsture</a>
-        <a href="#dziedajumi" class="nav-btn">Sižets</a>
-        <a href="#teli" class="nav-btn">Tēli</a>
-        <a href="#liktenis" class="nav-btn">Spēle</a>
+    <nav>
+        <a href="#hero">Sākums</a>
+        <a href="#eposs">Eposs</a>
+        <a href="#teli">Tēli</a>
+        <a href="#autors">Autors</a>
     </nav>
 
+    <div class="hero-container" id="hero">
+        <img src="https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1600&q=80" alt="Latvijas Meži" class="hero-image" id="parallaxImg">
+    </div>
+
     <div class="container">
-        
-        <section id="vesture" data-aos="fade-up">
-            <span class="section-tag">01. Izcelsme</span>
-            <h2>Vēsturiskais fons</h2>
-            <p style="font-size: 1.25rem;">Eposs "Lāčplēsis" tika sarakstīts no <span style="color: var(--moss); font-weight: bold;">1872. līdz 1888. gadam</span>. Andrejs Pumpurs to radīja Trešo Vispārējo latviešu Dziesmu svētku laikā. Šis darbs kļuva par latviešu tautas pašapziņas simbolu, apvienojot folkloru ar nacionālo cīņu pret apspiedējiem.</p>
+        <section id="eposs" class="reveal">
+            <h1>Lāčplēsis</h1>
+            <div class="info-section">
+                <p><strong>"Lāčplēsis"</strong> ir Andreja Pumpura sarakstīts varoņeposs, kas ir viens no svarīgākajiem darbiem latviešu literatūras vēsturē. Tas ir stāsts par mītisku varoni, kura liktenis ir nesaraujami saistīts ar viņa tautas brīvību. Eposs iemieso latviešu alkas pēc neatkarības un nacionālo identitāti, kas ir īpaši aktuāla arī šodien.</p>
+                <p>Darbā savijas vēsturiskas liecības par 13. gadsimta krustnešu iebrukumu un senas latviešu teikas, radot unikālu un episku pasauli.</p>
+            </div>
         </section>
 
-        <section id="dziedajumi" data-aos="fade-up">
-            <span class="section-tag">02. Struktūra</span>
-            <h2>Seši Dziedājumi</h2>
-            <div class="info-grid">
-                <div class="card">
-                    <h4>I-II Dziedājums</h4>
-                    <p>Dievu padoms un Lāčplēša pirmais varoņdarbs — lāča saplēšana, kas viņam dod slavu un vārdu.</p>
-                </div>
-                <div class="card">
-                    <h4>III-IV Dziedājums</h4>
-                    <p>Zināšanu apguve Burtnieku pilī, tikšanās ar Laimdotu un ceļojums uz Ziemeļmeitas dārziem.</p>
-                </div>
-                <div class="card">
-                    <h4>V-VI Dziedājums</h4>
-                    <p>Kangara nodevība, spēka zaudēšana un izšķirošā kauja ar Melno bruņinieku Likteņupes krastā.</p>
+        <section id="teli" class="reveal">
+            <h2 style="text-align: center; color: var(--accent);">Eposa Varoņi</h2>
+            <div class="info-section">
+                <div class="characters-grid">
+                    <div class="char-box">
+                        <strong>Lāčplēsis</strong>
+                        <p>Varonis, kuram piemīt pārcilvēcisks spēks ausīs. Viņš ir neuzvarams, kamēr vien viņa ausis ir veselas.</p>
+                    </div>
+                    <div class="char-box">
+                        <strong>Laimdota</strong>
+                        <p>Simbolizē tautas cerību, mīlestību un gaismu. Viņa ir Lāčplēša ceļvedis un uzticamā dzīvesbiedre.</p>
+                    </div>
+                    <div class="char-box">
+                        <strong>Kangars</strong>
+                        <p>Nodevējs, kurš personificē tos, kas personīgā labuma dēļ ir gatavi nodot savu valsti un draugus.</p>
+                    </div>
+                    <div class="char-box">
+                        <strong>Spidala</strong>
+                        <p>Sarežģīts tēls — sākumā ragana, bet vēlāk mainās un izpērk savus grēkus, palīdzot varoņiem.</p>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <section id="teli" data-aos="fade-up">
-            <span class="section-tag">03. Arhetipi</span>
-            <h2>Galvenie Varoņi</h2>
-            <div class="info-grid">
-                <div class="card">
-                    <h3 style="color: var(--moss);">Lāčplēsis</h3>
-                    <p>Tautas spēka iemiesojums. Viņa ausis ir saikne ar dabu un sargājošo intuīciju.</p>
-                </div>
-                <div class="card">
-                    <h3 style="color: var(--moss);">Laimdota</h3>
-                    <p>Mīlestība, gaisma un latviskās gudrības sargs. Viņa ir varoņa lielākais atbalsts.</p>
-                </div>
-                <div class="card">
-                    <h3 style="color: var(--moss);">Spīdola</h3>
-                    <p>Transformācijas simbols — no tumsas raganas par gaismas palīgu un sabiedroto.</p>
-                </div>
+        <section id="autors" class="reveal">
+            <h2 style="text-align: center; color: var(--accent);">Par Autoru</h2>
+            <div class="info-section">
+                <p><strong>Andrejs Pumpurs (1841—1902)</strong> radīja šo šedevru, lai stiprinātu latviešu pašapziņu laikā, kad veidojās latviešu nācija. Viņš apceļoja Latviju, vācot mutvārdu dzeju un stāstus, lai vēlāk tos apvienotu sešos dziedājumos, ko mēs pazīstam kā "Lāčplēsi".</p>
             </div>
         </section>
 
-        <section id="liktenis" class="rulete-box" data-aos="zoom-in">
-            <span class="section-tag" style="color: var(--leaf);">Interaktīvi</span>
-            <h2>Likteņa Griešana</h2>
-            <p>Noskaidro, kuru tēlu Tu iemieso šajā nacionālajā epopejā.</p>
-            <div id="hero-name">---</div>
-            <button class="btn-main" onclick="roll()">GRIEZT RULLI</button>
-            <p id="hero-info" style="margin-top: 25px; font-style: italic; opacity: 0.8;"></p>
+        <section class="reveal">
+            <h2 style="text-align: center; color: var(--accent);">Zināšanu krātuve</h2>
+            <div class="info-section">
+                <p id="fact-display">Nospied pogu, lai uzzinātu slepenu faktu!</p>
+                <button class="fact-btn" onclick="showFact()">Atklāt faktu</button>
+            </div>
         </section>
-
     </div>
 
     <footer>
-        <p>LĀČPLĒSIS // ECO-MODERN // 2026</p>
+        <p>&copy; 2026 "Lāčplēsis" — Digitālā mantojuma lapa</p>
     </footer>
 
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        AOS.init({ duration: 1000 });
+        // 1. Parallaksa efekts bildei
+        window.addEventListener('scroll', function() {
+            const parallax = document.getElementById('parallaxImg');
+            let offset = window.pageYOffset;
+            parallax.style.transform = 'translateY(' + offset * 0.4 + 'px)';
+        });
 
-        const data = [
-            { n: "LĀČPLĒSIS", i: "Tev piemīt dabas spēks un drosme aizstāvēt vājākos." },
-            { n: "LAIMDOTA", i: "Tu esi gaismas nesējs un gudrības avots saviem tuvajiem." },
-            { n: "SPĪDOLA", i: "Tava griba ir spēcīgāka par jebkuru likteni — Tu spēj mainīties." },
-            { n: "KOKNESIS", i: "Tu esi uzticams draugs, uz kura pleca var paļauties jebkurā laikā." },
-            { n: "BURTNIEKS", i: "Tev pieder zināšanas, kas palīdz saskatīt patiesību starp meliem." }
+        // 2. Scroll Reveal animācija (parādīšanās skrollējot)
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // 3. Interaktīvie fakti
+        const fakti = [
+            "Lāčplēša dienu 11. novembrī nodibināja par godu uzvarai pār Bermontu 1919. gadā.",
+            "Pirmais eposa izdevums tika izdots 1888. gadā.",
+            "Andrejs Pumpurs strādāja par mērnieku un vēlāk par militārpersonu.",
+            "Lāčplēša tēls ir izmantots ne tikai literatūrā, bet arī rokopera un datorspēlēs.",
+            "Kangars savu nodevību veica, noslēdzot līgumu ar velnu."
         ];
 
-        function roll() {
-            const name = document.getElementById('hero-name');
-            const info = document.getElementById('hero-info');
-            let count = 0;
-            const timer = setInterval(() => {
-                name.innerText = data[Math.floor(Math.random() * data.length)].n;
-                count++;
-                if (count > 12) {
-                    clearInterval(timer);
-                    const final = data[Math.floor(Math.random() * data.length)];
-                    name.innerText = final.n;
-                    info.innerText = final.i;
-                }
-            }, 80);
+        function showFact() {
+            const display = document.getElementById('fact-display');
+            const randomFact = fakti[Math.floor(Math.random() * fakti.length)];
+            display.style.opacity = 0;
+            setTimeout(() => {
+                display.innerText = randomFact;
+                display.style.opacity = 1;
+            }, 300);
         }
     </script>
 </body>
